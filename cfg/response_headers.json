@@ -1,0 +1,7 @@
+{
+  "Content-Type": "text/plain",
+  "Status-Code": 404,
+  "Connection": "Keep-Alive",
+  "Transfer-Encoding": "chunked",
+  "Access-Control-Allow-Origin": "*"
+}

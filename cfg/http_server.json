@@ -4,5 +4,12 @@
   "host": "192.168.86.60",
   "url": "http://192.168.86.60:9012/",
   "docroot_r": "../../doc",
-  "homeroot_r": "../../"
+  "homeroot_r": "../../",
+  "evt": {
+    "INFO_EVENT": "INFO-EVENT",
+    "ERROR_EVENT": "ERROR-EVENT",
+    "HEADER_IS_SET": "HEADER-IS-SET",
+    "CLIENT_READY_RESPONSE_STREAM": "CLIENT-READY-RESPONSE-STREAM",
+    "CLIENT_ERROR_RESPONSE": "CLIENT-ERROR-RESPONSE"
+  }
 }
