@@ -9,9 +9,9 @@ const { parse: qsParser } = require('querystring')
 const { pathToFileURL: path2file, fileURLToPath: file2path } = require('url')
 
 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+const { GadgetJs } = require('../../app.js')
 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+const app = new GadgetJs()
 //  Object Router [ Type - EventEmitter ] Prototype Constructor
 const Router = function(n = '_router', $DOCPATH, request, response, ...proxyEmitters) {
     this.name = n
@@ -33,6 +33,7 @@ Router.prototype.route = function() {
 
 Router.prototype.docStream = function(docpath) {
     let stream
+    app.emit('NEW-DOCPATH', docpath)
     return new Promise((resolve, reject) => {
         fsAsync.open(docpath, 'r', 0o666, { autoClose: true })
             .then(fd => {
@@ -42,6 +43,7 @@ Router.prototype.docStream = function(docpath) {
             .catch(err => {
                 err ? reject(err) : !err
             })
+        
     })
 }
 

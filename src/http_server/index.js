@@ -92,7 +92,7 @@ function resolveDocRoot() {
     return joinPath(__dirname, relDocPath)
 }
 //  Event Handler - GET
-http_server.on('GET', (request, response, $DOCPATH, proxyEmitter) => {
+http_server.once('GET', (request, response, $DOCPATH, proxyEmitter) => {
     let _router = new Router('_router', this.$DOCPATH, request, response, proxyEmitter.errorEmit.bind(this), proxyEmitter.infoEmit.bind(this), proxyEmitter.rddRspnseEmit.bind(this), proxyEmitter.clErrResponse.bind(this))
     
     let { ext } = parsePath(request.url)
@@ -116,17 +116,17 @@ http_server.on('GET', (request, response, $DOCPATH, proxyEmitter) => {
 })
 
 //  Event Handler - POST
-http_server.on('POST', (request, response) => {
+http_server.once('POST', (request, response) => {
 
 })
 
 // Event Handler - PUT
-http_server.on('PUT', (request, response) => {
+http_server.once('PUT', (request, response) => {
 
 })
 
 //  Event Handler - DELETE
-http_server.on('DELETE', (request, response) => {
+http_server.once('DELETE', (request, response) => {
 
 })
 
