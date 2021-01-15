@@ -19,15 +19,17 @@ const ResponseHeaders = function(n, proxyEvents) {
     this.headers = {
         _RESPONSE_HEADERS_:{},
         RESPONSE_HEADERS_DEFAULT: require('../../cfg/response_headers.json'),
+        _SET_INITIAL_DEFAULT() {
+            let keys = ["Status-Code", "Content-Type", "Connection", "Transfer-Encoding", "Access-Control-Allow-Origin"]
+            keys.forEach(k => this._RESPONSE_HEADERS_[k] = this._RESPONSE_HEADERS_[k] || this.RESPONSE_HEADERS_DEFAULT[k])
+        },
         set contentType(value){
             this._RESPONSE_HEADERS_["Content-Type"] = value
             return [this._RESPONSE_HEADERS_["Content-Type"] === value]
         },
         
         get contentType() {
-            return typeof this._RESPONSE_HEADERS_["Content-Type"] !== 'undefined'
-                ? this._RESPONSE_HEADERS_["Content-Type"]
-                : this.RESPONSE_HEADERS_DEFAULT["Content-Type"]
+            return this._RESPONSE_HEADERS_["Content-Type"]
         },
         
         set statusCode(value){
@@ -36,9 +38,8 @@ const ResponseHeaders = function(n, proxyEvents) {
         },
     
         get statusCode() {
-            return typeof this._RESPONSE_HEADERS_["Status-Code"] !== 'undefined'
-                   ? this._RESPONSE_HEADERS_["Status-Code"]
-                   : this.RESPONSE_HEADERS_DEFAULT["Status-Code"]
+            return this._RESPONSE_HEADERS_["Status-Code"]
+                 
         },
         set transferEncoding(value){
             this._RESPONSE_HEADERS_["Transfer-Encoding"] = value
@@ -46,9 +47,8 @@ const ResponseHeaders = function(n, proxyEvents) {
         },
     
         get transferEncoding() {
-            return typeof this._RESPONSE_HEADERS_["Transfer-Encoding"] !== 'undefined'
-                   ? this._RESPONSE_HEADERS_["Transfer-Encoding"]
-                   : this.RESPONSE_HEADERS_DEFAULT["Transfer-Encoding"]
+            return this._RESPONSE_HEADERS_["Transfer-Encoding"]
+            
         },
         set connectionType(value){
             this._RESPONSE_HEADERS_["Connection"] = value
@@ -56,9 +56,8 @@ const ResponseHeaders = function(n, proxyEvents) {
         },
     
         get connectionType() {
-            return typeof this._RESPONSE_HEADERS_["Connection"] !== 'undefined'
-                   ? this._RESPONSE_HEADERS_["Connection"]
-                   : this.RESPONSE_HEADERS_DEFAULT["Connection"]
+            return this._RESPONSE_HEADERS_["Connection"]
+            
         },
         set accessControlAllowOrigin(value){
             this._RESPONSE_HEADERS_["Access-Control-Allow-Origin"] = value
@@ -66,9 +65,7 @@ const ResponseHeaders = function(n, proxyEvents) {
         },
     
         get accessControlAllowOrigin() {
-            return typeof this._RESPONSE_HEADERS_["Access-Control-Allow-Origin"] !== 'undefined'
-                   ? this._RESPONSE_HEADERS_["Access-Control-Allow-Origin"]
-                   : this.RESPONSE_HEADERS_DEFAULT["Access-Control-Allow-Origin"]
+            return this._RESPONSE_HEADERS_["Access-Control-Allow-Origin"]
         },
     }
     
@@ -76,12 +73,9 @@ const ResponseHeaders = function(n, proxyEvents) {
     return this
 }
 ResponseHeaders.prototype.assign = function (k, v)  {
-    
-    let headerPair = !this.headers[k] ?
-              !v === this.headers[k] || v !== undefined && k in this.headers
-              ? this.headers[k] = v : ![!k || !v] : [k,v]
-    this.setEvent(k,v)
-    return headerPair
+    this.headers[k] = v
+    this.setEvent(k, this.headers[k])
+    return this.headers[k] === v
 }
 
 ResponseHeaders.prototype.buildHeaders = function() {
