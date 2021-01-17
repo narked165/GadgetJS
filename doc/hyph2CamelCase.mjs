@@ -1,4 +1,4 @@
-export default function hyph2CamelCase(value) {
+function hyph2CamelCase(value) {
     let _result = []
     let charArray = typeof ( value ) !== 'undefined' && typeof ( value ) === 'string' && value.includes('-')
                     ? Array.from(value)
@@ -20,3 +20,5 @@ export default function hyph2CamelCase(value) {
     
     return _result.join('').toString().trim()
 }
+
+export { hyph2CamelCase }

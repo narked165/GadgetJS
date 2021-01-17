@@ -2,8 +2,8 @@ const { Eve } = require('./lib/Eve.js')
 
 const eve = new Eve()
 
-const GadgetJs = function(n) {
-    this.name = name
+const GadgetJs = function() {
+    this.name = 'GadgetJs'
  
     return this
 }

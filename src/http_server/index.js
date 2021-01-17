@@ -1,6 +1,6 @@
 const { createWriteStream: wStream, createReadStream: rStream,  promises: fsAsync } = require('fs')
 const { join: joinPath, parse: parsePath, sep } = require('path')
-const { inherits } = require('util')
+const { inherits, promisify } = require('util')
 const { duplex, Transform, pipeline } = require('stream')
 const http = require('http')
 const assert = require('assert')
@@ -17,7 +17,10 @@ const { convertExt2ContentType } = require('../../lib/convertExt2ContentType')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const http_server = http.createServer()
+const { GadgetJs } = require('../../app.js')
+const app = new GadgetJs()
 
+//-------------------------------------------------------------------------
 //  Import predefined server configurations
 http_server.cfg = require('../../cfg/http_server.json')
 const { ERROR_EVENT, INFO_EVENT, HEADER_IS_SET, CLIENT_READY_RESPONSE_STREAM, CLIENT_ERROR_RESPONSE } = http_server.cfg['evt']
@@ -64,49 +67,30 @@ http_server.on('close', () => {
         \n`)
 })
 
-function eventEmitterProxy(k, v) {
 
-let _proxyEmitters = {
-   
-    hdrSetEmit(k, v) {
-        return http_server.emit(HEADER_IS_SET, k, v)
-    },
-    errorEmit(err) {
-        return http_server.emit('error', err)
-    },
-    infoEmit(msg) {
-        return http_server.emit(INFO_EVENT, msg)
-    },
-    rddRspnseEmit(stream) {
-        return http_server.emit(CLIENT_READY_RESPONSE_STREAM)
-    },
-    clErrResponse(code, err) {
-        return http_server.emit(CLIENT_ERROR_RESPONSE)
-    }
-}
-    return _proxyEmitters
-}
 
 function resolveDocRoot() {
     let relDocPath = http_server.cfg.docroot_r
     return joinPath(__dirname, relDocPath)
 }
 //  Event Handler - GET
-http_server.once('GET', (request, response, $DOCPATH, proxyEmitter) => {
-    let _router = new Router('_router', this.$DOCPATH, request, response, proxyEmitter.errorEmit.bind(this), proxyEmitter.infoEmit.bind(this), proxyEmitter.rddRspnseEmit.bind(this), proxyEmitter.clErrResponse.bind(this))
-    
+http_server.once('GET', (request, response) => {
+    let _router = new Router(request, response)
+    app.on('RESPONSE_READY',  () => console.info(`PATH: RESPONSE READY, SENDING:${_docPath}`))
     let { ext } = parsePath(request.url)
     let _contentType = convertExt2ContentType(ext)
-    console.log(_contentType)
+
+    
     http_server.emit(INFO_EVENT, `GET-EVENT HANDLER Called`)
     let _docPath = _router.route()
+    app.emit('RESPONSE_READY', _docPath)
     let _docStream = _router.docStream(_docPath)
-    console.log(_docPath)
+
     _docStream
-        .then(stream => {
-            typeof stream === 'object'
-                ? http_server.emit(CLIENT_READY_RESPONSE_STREAM, stream, 200, _contentType)
-                : !stream
+        .then(_stream => {
+            typeof _stream === 'object'
+                ? http_server.emit(CLIENT_READY_RESPONSE_STREAM, _stream, 200, _contentType)
+                : http_server.emit('CLIENT-ERROR-RESPONSE', `Stream Error -> STREAM: ${ typeof _stream === 'object' } `)
         })
         
         .catch((err) => {
@@ -116,7 +100,7 @@ http_server.once('GET', (request, response, $DOCPATH, proxyEmitter) => {
 })
 
 //  Event Handler - POST
-http_server.once('POST', (request, response) => {
+http_server.on('POST', (request, response) => {
 
 })
 
@@ -144,13 +128,12 @@ http_server.on('connection', c => {
         let $DOCPATH = http_server.$DOCPATH.toString().trim()
         let _response_headers = new ResponseHeaders('_response_headers_', proxyEmitter.hdrSetEmit.bind(this))
         _response_headers.headers._SET_INITIAL_DEFAULT()
-       
+    
         //  Event-Handler (Singleton) - Sends html error page to remote connected client
         http_server.once(CLIENT_ERROR_RESPONSE, (err) => {
-            response.writeHead(404, {
-                "Status-Message": "You Suck Balls!"
-            })
-            response.end(`<h1>${ err }</h1>`)
+           err ?  response.writeHead(404, { "Content-Type": "text/html"}) &&
+                  response.end(`<h1>${ err }</h1>`)
+               :  response.end('<h1>Complete!</h1>')
         })
         
         //  Event Handler (Singleton) - Response Ready (Read Stream Instance)
@@ -161,24 +144,35 @@ http_server.on('connection', c => {
              _response_headers.assign('contentType', _contentType)
              _response_headers.assign('accessControlAllowOrigin', _CLIENT.origin)
             let { statusCode, headers } = _response_headers.buildHeaders()
-           
-           
+         
+            
             http_server.emit(INFO_EVENT, `Headers are set...`)
            
            response.writeHead(statusCode, headers)
-            
-            pipeline(
-                _stream,
-                response,
-                (err) => err ? http_server.emit('error', err) : !err
-            
-        )
-        
+           
+           let _clientResponse = CLIENT_RESPONSE_STREAM(_stream)
+              pipeline(
+                  _clientResponse,
+                  response,
+                  (err) => {
+                      return err ? console.error(err) : !err
+                     
+                  }
+              )
             
         })
-        http_server.emit(reqMethod, request, response, this.$DOCPATH, proxyEmitter)
+        http_server.emit(reqMethod, request, response)
     })
 })
+
+function CLIENT_RESPONSE_STREAM(datastream) {
+    return rStream(datastream, 'UTF-8', (err) => {
+        err ? http_server.emit(CLIENT_ERROR_RESPONSE, err)
+            : http_server.emit(INFO_EVENT, `Response sent at ${new Date().toLocaleTimeString()}`)
+    })
+}
+
+
 
 //  Main Export = http_server
 module.exports = { http_server }

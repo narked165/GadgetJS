@@ -13,32 +13,28 @@ const { GadgetJs } = require('../../app.js')
 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const app = new GadgetJs()
 //  Object Router [ Type - EventEmitter ] Prototype Constructor
-const Router = function(n = '_router', $DOCPATH, request, response, ...proxyEmitters) {
-    this.name = n
+const Router = function(request, response) {
+    this.name = '_router'
     this.request = request
     this.response = response
     this.$DOCPATH = joinPath(__dirname, '..', '..', 'doc')
-    let [ errEmit, infoEmit, rddRsp, clErrRsp ] = proxyEmitters
-    this.errorEmitter = errEmit
-    this.infoEmitter = infoEmit
-    this.readyResponseEmitter = rddRsp
-    this.clientErrorResponse = clErrRsp
     EventEmitter.apply(this)
     return this
 }
 
 Router.prototype.route = function() {
-    return joinPath(`${ this.$DOCPATH }${ (this.request).url }`)
+   let CLIENT_REQUEST_PATH =  joinPath(`${ this.$DOCPATH }${ this.request.url }`)
+    return Buffer.from(CLIENT_REQUEST_PATH)
 }
 
 Router.prototype.docStream = function(docpath) {
     let stream
     app.emit('NEW-DOCPATH', docpath)
     return new Promise((resolve, reject) => {
-        fsAsync.open(docpath, 'r', 0o666, { autoClose: true })
+        fsAsync.open(docpath, 'r', 0o666)
             .then(fd => {
                 typeof(docpath) === 'undefined' ||
-                fd ? fd.close() && resolve(rStream(docpath)) : !fd
+                fd ? fd.close() && resolve(docpath) : !fd
             })
             .catch(err => {
                 err ? reject(err) : !err
