@@ -1,5 +1,5 @@
-import { Controller } from './main/Controller.mjs'
-import { Eve } from './main/Eve.mjs'
+import { Controller } from './main/Controller.js'
+import { Eve } from './main/Eve.js'
 
 const eve = new Eve()
 

@@ -1,4 +1,4 @@
-function hyph2CamelCase(value) {
+const  hyph2CamelCase = function(value) {
     let _result = []
     let charArray = typeof ( value ) !== 'undefined' && typeof ( value ) === 'string' && value.includes('-')
                     ? Array.from(value)

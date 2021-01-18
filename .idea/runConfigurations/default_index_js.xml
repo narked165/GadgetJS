@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="default-index.js" type="NodeJSConfigurationType" activateToolWindowBeforeRun="false" path-to-node="/usr/local/bin/nodemon" node-parameters="--inspect-brk" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
+    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
+      <browser start="true" url="http://localhost:9012/default.html" />
+    </EXTENSION>
+    <method v="2" />
+  </configuration>
+</component>
