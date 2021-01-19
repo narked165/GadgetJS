@@ -1,0 +1,25 @@
+{
+  "name": "gadgetjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/narked165/GadgetJS.git"
+  },
+  "author": "Paul Fabing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/narked165/GadgetJS/issues"
+  },
+  "homepage": "https://github.com/narked165/GadgetJS#readme"
+}

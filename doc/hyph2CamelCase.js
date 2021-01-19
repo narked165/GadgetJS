@@ -1,4 +1,4 @@
-const  hyph2CamelCase = function(value) {
+export default function(value) {
     let _result = []
     let charArray = typeof ( value ) !== 'undefined' && typeof ( value ) === 'string' && value.includes('-')
                     ? Array.from(value)
@@ -8,7 +8,7 @@ const  hyph2CamelCase = function(value) {
             transform(charArray.pop(), char => _result.unshift(char))
             
         })
-    } while(charArray.length)
+    } while ( charArray.length )
     
     
     function transform(char, callback) {
@@ -20,5 +20,3 @@ const  hyph2CamelCase = function(value) {
     
     return _result.join('').toString().trim()
 }
-
-export { hyph2CamelCase }

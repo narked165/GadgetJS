@@ -16,16 +16,7 @@ http_server.on('INFO_EVENT', (m) => console.info(m))
 
 
 http_server.once('GET', (request, response) => {
-    let location = joinPath(__dirname, request.url)
-    console.log(location)
-   fsAsync.realpath(location)
-       .then(rp => {
-           http_server.emit('CLIENT_READY_RESPONSE', rp)
-       })
-    
-       .catch(err => {
-           err ? http_server.emit('error', err) : !err
-       })
+  let _router = new Router(request, response)
    
    
    
@@ -42,27 +33,19 @@ http_server.on('connect', (c) => {
     http_server.emit('INFO_EVENT', `New Client Connection from http://${ c.remoteAddress }:${ c.remotePort }`)
 })
 http_server.on('request', (request, response) => {
-    request.on('error', (e) => {
-        e ? console.log(e) : !e
-    })
-    http_server.once('CLIENT_READY_RESPONSE', (_location ) => {
+
+    http_server.once('CLIENT_READY_RESPONSE', (opt) => {
+            let { _uid, _location } = opt
         let responseData = responseLocation(_location)
         let origin = responseOrigin(request)
         let _contentType = responseContentType(request.url)
+        let _responseHeaders =  responseHeaders(origin, _contentType, response)
         
-       let headers = new Promise((resolve, reject) => {
-           let done =  responseHeaders(origin, _contentType, response)
-                done ? resolve(done)
-                        : done.name === 'Error'
-                            ? reject(done)
-                            : !err
-       })
-       
-        headers.then(() => pipeline(
+        pipeline(
             responseData,
             response,
             (err) => {err ? http_server.emit(err): !err}
-        ))
+        )
        
         
     })
@@ -85,7 +68,6 @@ function convertExt2Ctype(ext) {
     let mimetypeTable = require('../../cfg/mimeTypes.json')
     !ext.startsWith('.') ? ext = '.' + ext.trim()
                          : ext.trim()
-    
    return ( ext in mimetypeTable ? mimetypeTable[ext]
                          : mimetypeTable['text/plain'])
 }
@@ -102,12 +84,13 @@ function responseContentType(reqUrl) {
     return convertExt2Ctype(ext)
 }
 
-function responseHeaders(_origin, _contentType, response) {
+function responseHeaders(_origin, _contentType, response, _uid) {
     response.writeHead(200, {
         'Content-Type': _contentType,
         'Transfer-Encoding': 'chunked',
         'Connection': 'Keep-alive',
-        'Access-Control-Allow-Origin': _origin
+        'Access-Control-Allow-Origin': _origin,
+        'Request-UID': _uid
     })
     
     return true
