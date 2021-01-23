@@ -11,6 +11,11 @@ const { Request_Cache } = require('../../lib/RequestCache')
 *  ~*~*~*~*~*~*~**~**~**~*~~**~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~**~~* */
 const _request_cache = Request_Cache
 const http_server = http.createServer()
+http_server.cfg = require('../../cfg/http_server.json')
+const { GadgetJs } = require('../../app.js')
+const app = new GadgetJs()
+app.emit('SERVER-UP')
+
 http_server.on('error', (e) => console.warn(e))
 
 http_server.on('INFO_EVENT', (m) => console.info(m))
@@ -126,7 +131,7 @@ Router.prototype.responseHeaders = function(_origin, _contentType) {
 }
 
 
+module.exports ={ http_server }
 
 
-
-http_server.listen(9022, 'localhost')
+//http_server.listen(9022, 'localhost')

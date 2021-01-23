@@ -4,7 +4,6 @@ const eve = new Eve()
 
 const GadgetJs = function() {
     this.name = 'GadgetJs'
- 
     return this
 }
 //  Eve Event Emitter - on (addListener)

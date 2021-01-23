@@ -1,14 +1,128 @@
 * {
-    box-sizing: border-box;
-    font-family: "Roboto", sans-serif;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+    font-family: "Ubuntu", "Roboto", serif;
+    overflow: hidden;
 }
 
-body {
-    background-color: rgba(20,20,20,0.9)
+.main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: darkslateblue;
 }
 
-h1 {
-    color: orange;
+.app {
+    position: absolute;
+    top: 5vh;
+    bottom: 10vh;
+    left: 10vw;
+    right: 10vw;
+    border: 18pt double mediumslateblue;
+    padding: 5%;
+}
+
+.app-title {
+    position: relative;
+  font-family: "Syncopate", serif;
+    font-stretch: ultra-expanded;
+    text-combine-upright: all;
+    text-align: center;
+    line-height: 80pt;
+
+
+
+
+}
+
+.gadget-title {
+    font-family: "Syncopate", serif;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 40pt;
+    text-shadow: 0 0 20px rgba(200, 100, 255, 0.9);
+}
+
+.js-title {
+    font-family: "Just Another Hand", serif;
+    color: darkorange;
+    font-size: 96pt;
+}
+
+.app-tagline {
+    text-align: center;
+    color: lemonchiffon;
+    font-size: 16pt;
+}
+
+.app-container {
+    position: relative;
+    top: 3vh;
+    bottom: 3vh;
+    left: 1vw;
+    right: 1vw;
+    height: 66%;
+    width: 96%;
+    padding: 5% 5%;
+    background-color: rgba(255, 225, 255, 0.4);
+    text-align: center;
+}
+@keyframes dotIt{
+    0% {
+
+    }
+    50% {
+          color: rgba(20, 20, 50, 0.2); font-size: 48pt;
+    }
+    100% {
+
+    }
+}
+.load-dot {
+    font-size: 48pt;
+    color: rgba(20, 20, 50, .2);
+    padding: 0 2%
+}
+.it {
+    animation: dotIt 900ms ease-in-out  infinite 100ms
+}
+
+.not-it {
+    color: rgba(20, 20, 50, 0);
+    animation: none;
+}
+
+.load-title {
+    color: rgba(20,20,50,.2);
+    font-size: 36pt;
+}
+.base-transparent-dot {
+    color: transparent
+}
+.base-red-dot { color: rgba(255,0,0,1); }
+
+.base-green-dot { color: rgba(0,255,0, 1);}
+
+.base-blue-dot { color: rgba(0, 0, 255, 1); }
+
+.base-yellow-dot { color: rgba(255,255,0,1); }
+
+.base-orange-dot { color: rgba(255, 123, 0, 1); }
+
+.uni-corntainer {
+    width: 65vw;
+    text-align: center;
+    padding: 1%;
+
+}
+.unicorn {
+    font-size: 128pt;
+    position: absolute;
+    top: 7vh;
+    right: 13vh;
+
 }
