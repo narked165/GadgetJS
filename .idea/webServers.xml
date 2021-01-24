@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d2bb16e8-dd72-4b06-8e16-b3127be78d36" name="foothillcomputrrepair" url="http://foothillcomputerrepair.org">
+        <fileTransfer accessType="SFTP" host="157.245.160.234" port="22" sshConfigId="7ad0f688-5064-4437-b869-c8a450c895fa" sshConfig="paul@157.245.160.234:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

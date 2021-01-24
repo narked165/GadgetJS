@@ -23,6 +23,7 @@ http_server.on('INFO_EVENT', (m) => console.info(m))
 
 http_server.on('GET', (request, response) => {
         const _router = new Router(request, response)
+        _router.parseRequest()
         http_server.emit('CLIENT_READY_RESPONSE', _router)
     })
 
@@ -91,6 +92,14 @@ function Router (request, response) {
     this.url = new URL(`http://${ request.socket.localAddress }:${ request.socket.localPort }/doc${ request.url }`)
     this.headers = reqHeaders
     return this
+}
+Router.prototype.parseRequest = function() {
+    // Define routing response by sub-catagory.
+    
+    // Sub(1) -> Is a Route ie ' /default  '
+    // Sub(2) -> Is a qualified path. ie. ' /default/index.css  '
+    // Sub(3) -> Is a functional route ie. '/api/app-manager/app-catalog
+    // Sub(4) -> Is an enumerated route ie. '  /cloud-literal/jsmith522/customer-data:1234560987 '
 }
 Router.prototype.responseData = function(_responseLocation) {
     return rStream(this.location, 'UTF-8')
