@@ -14,7 +14,7 @@ const http_server = http.createServer()
 http_server.cfg = require('../../cfg/http_server.json')
 const { GadgetJs } = require('../../app.js')
 const app = new GadgetJs()
-app.emit('SERVER-UP')
+
 
 http_server.on('error', (e) => console.warn(e))
 
@@ -34,7 +34,7 @@ http_server.once('POST', (request, response) => {
 http_server.on('connection', (c) => {
     http_server.emit('INFO_EVENT', `New Client Connection from http://${ c.remoteAddress }:${ c.remotePort }`)
 })
-http_server.on('listening',() =>  http_server.emit('INFO_EVENT', 'Server is up....'))
+http_server.on('listening',() =>  app.emit('SERVER-UP', http_server.cfg.url))
 
 http_server.on('request', (request, response) => {
     let { method } = request
@@ -143,4 +143,4 @@ Router.prototype.responseHeaders = function(_origin, _contentType) {
 module.exports ={ http_server }
 
 
-//http_server.listen(9022, 'localhost')
+http_server.listen(9022, 'localhost')

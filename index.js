@@ -11,10 +11,11 @@ const { pathToFileURL: path2file, fileURLToPath: file2path } = require('url')
 const { GadgetJs } = require('./app.js')
 const app = new GadgetJs()
 const { http_server } = require('./src/testServer/testServer.js')
-app.once('SERVER-UP', () => {
+app.once('SERVER-UP', ($_URL) => {
     console.info(`
     [i] [INFO] [${ new Date().toLocaleTimeString()}] :: [SERVER-UP]
         MESSAGE: http-server has started.
+        Server up at: ${ $_URL }
     `)
 })
 

@@ -10,7 +10,8 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node _coverage/index.js && echo \"Starting decaf...\"",
+    "start_staging_env": "node index.js && echo \" Starting server in, staging env.\""
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/narked165/GadgetJS/issues"
   },
-  "homepage": "https://github.com/narked165/GadgetJS#readme"
+  "homepage": "https://github.com/narked165/GadgetJS#readme",
+  "website_url": "http://foothillcomputerrepair.org"
 }

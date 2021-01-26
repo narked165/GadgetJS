@@ -1,0 +1,222 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-family: 'Ubuntu', 'Roboto', sans-serif;
+}
+body {
+    background-color: rgba(20, 20,20, 1);
+}
+.main-app {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    background-color: rgba(20,20,20,.1);
+    background-image: url('media/back.jpeg');
+    background-blend-mode: color-burn;
+    background-size: cover;
+    background-position: right;
+    overflow: hidden;
+    opacity: 0.8;
+    animation: backgroundwobble 30s ease alternate infinite 200ms;
+
+}
+
+h1 {
+    font-size: 22pt;
+
+}
+
+h3 {
+    font-size: 18pt;
+}
+
+@keyframes logotumble {
+    0% { opacity: 0 ; Transform: skewY(-180deg) rotateX(90deg);}
+    99% { opacity: 0; Transform: skewY(90deg) rotateX(90deg)}
+   100% { opacity: 0.8; Transform: skewY(360deg) }
+
+
+}
+@keyframes hideinital {
+    0% { opacity: 0 }
+    1% { opacity: 1 }
+    100% { opacity: .9  }
+}
+@keyframes rollin {
+    0% { top: 10vh; left: 1100px; border-radius: 0; Transform: rotateZ(639deg) }
+    20% {  top: -8vh; left: 1100px; border-radius: 10%; Transform: rotateZ(620deg); }
+    90% { top: -8vh; left: 1100px; border-radius: 60%; Transform: rotateZ(360deg) }
+    95% { top: -8vh; left: 1150px; border-radius: 60%; Transform: rotateZ(240deg); }
+    100% { top: -8vh; left: unset; border-radius: 60%; Transform: rotateZ(0deg); }
+}
+
+@keyframes iconattention {
+    0% { Transform: rotateY(-8deg) scale(1, 1); opacity: .9; border-radius: 0; box-shaddow: 0 0 2px rgba( 250, 250, 255, 0.2); }
+    10% { Transform: rotateY(89deg) scale(.9, .9); opacity: .2; border-radius: 0; box-shaddow: 0 1 2px rgba( 20, 20, 255, 0.9); }
+    30% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 0; box-shaddow: 2 0 2px rgba( 120, 120, 255, 0.9); }
+    60% { Transform: rotateY(90deg) scale(0, 0); opacity: 0; border-radius: 0; box-shaddow: 0 1 2px rgba( 120, 220, 255, 0.9); }
+    90% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 30%; box-shaddow: 1 0 2px rgba( 220, 220, 255, 0.9); }
+    100% { Transform: rotateY(8deg) scale(1, 1); opacity: .9; border-radius: 60%; box-shaddow: 0 0 2px rgba( 255, 255, 255, 9); }
+}
+
+@keyframes backgroundwobble {
+    0% {Transform: scale(2, 2) rotate3d(0,0,0, 0deg) skewY(0deg) skewX(0deg);}
+    100% {Transform: scale(3, 3) rotate3d(1,1,1,33deg) skewY(33deg) skewX(33deg); }
+}
+.nxs-logo {
+    width: 100vw;
+    height:100vh;
+    position: absolute;
+    top: 0vh;
+    left: 0vw;
+    opacity: 0.8;
+    Transform: perspective(150px) skewX(0deg) rotateY(0deg) scale(1,1);
+    background-color: rgba(0, 0, 0,0);
+    background-blend-mode: color-burn;
+    animation: logotumble 1s ease forwards 0ms 1;
+    border-bottom-left-radius: 10%;
+    border-bottom-right-radius: 10%;
+
+
+}
+
+.app-frame {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    Transform: perspective(19px) rotate3d(0, 2,0,360deg);
+    grid-template-columns: 100vw;
+    grid-template-rows: 18vh auto 50vh;
+    grid-row-gap: 5px;
+    background-image: radial-gradient(farthest-corner at 50vw 20vh, rgba(200, 200, 200, 0.1), rgba(20, 20, 20,0.6), rgba(20,20,20,0.3), rgba(20, 20, 50, 0.4), rgba(50, 20, 20, 0.4), rgba(20, 20,20, 0.3), rgba(20, 20, 20, 0.6), rgba(200,200,200,0.1));
+
+
+}
+
+.app-head {
+    grid-template-columns: auto;
+    background-color: rgba(20,20,20,.7);
+    box-shadow: 0 -4px 28px rgba(200, 200, 200, 0.7);
+    border-bottom-right-radius: 1%;
+    border-bottom-left-radius: 1%;
+  
+}
+.foot-wrap {
+    position: relative;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 100vw;
+    grid-auto-rows: minmax(auto, 70px);
+    width: 100vw;
+    left: 0;
+    height: 60vh;
+
+}
+.app-foot {
+    position: absolute;
+    background-color: rgba(0,0,0,.7);
+    box-shadow: 0px 5px 32px rgba(230, 230, 255, .6);
+    top:25vh;
+    left: 10vw;
+    Transform: perspective(1800px) rotateX(78deg) skew(0deg, 0deg);
+    width: 70vw;
+    height: 40vh;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
+
+}
+.navigation-wrap {
+    position: relative;
+    display: grid;
+    grid-template-columns:  1fr [app0hash] 1fr [app1hash] 1fr [app2hash] 1fr [app3hash] 1fr [app4hash] 1fr [app5hash];
+    width: 90vw;
+    left: 5vw;
+    height: 100vh;
+    padding: 10%;
+}
+
+.app-active {
+    grid-row-start: 2;
+    grid-row-end: span;
+    width: 80vw;
+    height: 20vh;
+    background-color: rgba(20,20,20,0);
+
+}
+
+.gadget-shortcut  {
+    position: relative;
+    align-self: center;
+    text-decoration: none;
+    font-size: 3em;
+    border-radius: 3%;
+    box-shadow: 0px 1px 31px rgba(195, 120, 255,.23);
+    Transform: perspective(150px) scale(1.1, 1.1);
+    justify-self: center;
+    top: -8vh;
+    left: 1vw;
+}
+
+.gadget-shortcut:hover {
+    Transform: perspective(1000px) scale3d(1.5, 1.5 , 1.5);
+    transition: all 3s ease-in-out 900ms;
+}
+
+.gadget-shortcut > i {
+    padding: 0.5em;
+    border: 1px double rgba(20, 120, 220, 0.1);
+    border-right: 4px double  rgba(20, 20, 220, .1);
+    border-bottom: 4px double rgba(20, 20, 220, .1);
+
+    text-shadow: 0 0 1px rgba(190,190,250, .9),
+    1px 1px 1px rgba(220, 20, 220, .7),
+    2px 2px 2px rgba(20, 20, 220, .7),
+    3px 3px 2px rgba(220, 250, 20, .7),
+    0px 0px 40px rgba(20, 120, 220, .6),
+    1px 1px 1px rgba(220, 20, 220, .7),
+    2px 2px 2px rgba(20, 20, 220, .7),
+    3px 3px 2px rgba(220, 250, 20, .7),
+    1px 1px 30px rgba(20, 20, 255, .75);
+    color: transparent;
+    background-color: transparent;
+}
+#app0hash {
+    animation: hideinital 1s linear 0s,
+    rollin 1s linear;
+}
+
+#app1hash {
+    animation: hideinital 1s linear 0ms,
+    rollin 1.3s linear 0s;
+
+}
+
+#app2hash {
+    animation: hideinital 1s linear 0ms ,
+    rollin 1.7s linear 0s;
+}
+#app3hash {
+    animation: hideinital 1s linear 0ms ,
+    rollin 1.9s linear 0s;
+}
+#app4hash {
+    animation: hideinital 1s linear 0ms,
+    rollin 2.1s linear 0s;
+}
+#app5hash {
+    animation: hideinital 1s linear 0ms,
+    rollin 2.3s linear 0s;
+}

@@ -1,6 +1,7 @@
-const Eve = function () {
+export default function () {
     return function() {
-        this.EventEmitter = {
+        this.name = 'eve'
+        this.constructor = {
             events: {},
         
             timestamp() {
@@ -48,10 +49,9 @@ const Eve = function () {
                 console.groupEnd()
             },
         }
-        return this.EventEmitter
+        return { [this.name]: this.constructor.apply(this) }
     }
     
    
 }
 
-export { Eve }
