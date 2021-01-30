@@ -1,4 +1,4 @@
-const Exports = { Controller, camelCaseTransformer, Gadgets : Gadgets(), eve: Eve() }
+const Exports = { Controller, GroupController, camelCaseTransformer, Gadgets : Gadgets(), eve: Eve() }
 
 
 
@@ -113,5 +113,16 @@ function Controller (_role, callback) {
     }
 }
 
-
+function GroupController(_group, callback) {
+    let GROUP = document.querySelectorAll(`[data-group]`)
+    let HTMLGROUPCOLLECTION = document.querySelectorAll(GROUP["gadget-shortcut"])
+    HTMLGROUPCOLLECTION.forEach(ELM => {
+        let role = ELM.getAttribute(role)
+        ELM.className = _group
+        ELM.id = ELM.dataset.role
+        ELM.classList.add(role)
+    })
+    callback(HTMLGROUPCOLLECTION)
+    return HTMLGROUPCOLLECTION
+}
 export { Exports as default }

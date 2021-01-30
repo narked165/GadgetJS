@@ -110,7 +110,7 @@ let decaf = {
         let tests = Object.keys(decaf.coverage)
         tests.map(test => decaf.run(test))
 
-        return this.decafHead()
+        //return this.decafHead()
     }
 }
 

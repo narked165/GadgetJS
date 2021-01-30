@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="http_service_edge.js" type="NodeJSConfigurationType" path-to-node="/usr/local/bin/nodemon" nameIsGenerated="true" node-parameters="--inspect-brk" path-to-js-file="http_service_edge.js" working-dir="$PROJECT_DIR$/src/http_server">
+    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
+      <browser start="true" url="http://127.0.0.1:9012/default/index.html" />
+    </EXTENSION>
+    <method v="2" />
+  </configuration>
+</component>

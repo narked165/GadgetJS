@@ -58,12 +58,12 @@ h3 {
 }
 
 @keyframes iconattention {
-    0% { Transform: rotateY(-8deg) scale(1, 1); opacity: .9; border-radius: 0; box-shaddow: 0 0 2px rgba( 250, 250, 255, 0.2); }
-    10% { Transform: rotateY(89deg) scale(.9, .9); opacity: .2; border-radius: 0; box-shaddow: 0 1 2px rgba( 20, 20, 255, 0.9); }
-    30% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 0; box-shaddow: 2 0 2px rgba( 120, 120, 255, 0.9); }
-    60% { Transform: rotateY(90deg) scale(0, 0); opacity: 0; border-radius: 0; box-shaddow: 0 1 2px rgba( 120, 220, 255, 0.9); }
-    90% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 30%; box-shaddow: 1 0 2px rgba( 220, 220, 255, 0.9); }
-    100% { Transform: rotateY(8deg) scale(1, 1); opacity: .9; border-radius: 60%; box-shaddow: 0 0 2px rgba( 255, 255, 255, 9); }
+    0% { Transform: rotateY(-8deg) scale(1, 1); opacity: .9; border-radius: 0; box-shadow: 0 0 2px rgba( 250, 250, 255, 0.2); }
+    10% { Transform: rotateY(89deg) scale(.9, .9); opacity: .2; border-radius: 0; box-shadow: 0 1px 2px rgba( 20, 20, 255, 0.9); }
+    30% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 0; box-shadow: 2px 0 2px rgba( 120, 120, 255, 0.9); }
+    60% { Transform: rotateY(90deg) scale(0, 0); opacity: 0; border-radius: 0; box-shadow: 0 1px 2px rgba( 120, 220, 255, 0.9); }
+    90% { Transform: rotateY(90deg) scale(.1, .1); opacity: 0; border-radius: 30%; box-shadow: 1px 0 2px rgba( 220, 220, 255, 0.9); }
+    100% { Transform: rotateY(8deg) scale(1, 1); opacity: .9; border-radius: 60%; box-shadow: 0 0 2px rgba( 255, 255, 255, 9); }
 }
 
 @keyframes backgroundwobble {
@@ -150,7 +150,6 @@ h3 {
 
 .app-active {
     grid-row-start: 2;
-    grid-row-end: span;
     width: 80vw;
     height: 20vh;
     background-color: rgba(20,20,20,0);

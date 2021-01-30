@@ -1,7 +1,9 @@
-import { default as Controller } from '../_export_modules/Controller'
-import { default as Eve } from '../_export_modules/Eve'
+import { default as Exports } from './controller.js'
+import { default as Eve } from '../_export_modules/Eve.js'
 
-const eve = new Eve()
+const { Controller, GroupController } = Exports
+const eve = Eve
+eve.on('CONTROLLER_ASSIGNMENT', (role) => console.info(`Assigning Controller to element, role: ${ role }`))
 
 eve.on('WINDOW-LOAD', () => console.log('Window has loaded.'))
 
@@ -15,9 +17,10 @@ window.addEventListener('load', () => {
     
     const mainApp = Controller('main-app', mainApp => {
     
+  
     })
     
-    const nxsLogo = Controller('nxs-logo', (nxsLogo) => {
+    const nxsLogo = Controller( 'nxs-logo', (nxsLogo) => {
         nxsLogo.src='media/nexus22.png'
         nxsLogo.alt='NEXUS Logo'
     })
@@ -26,7 +29,7 @@ window.addEventListener('load', () => {
     
     })
     
-    const appHead = Controller('app-head', appHead => {
+    const appHead = Controller( 'app-head', appHead => {
     
     })
     
@@ -51,7 +54,7 @@ window.addEventListener('load', () => {
         app0hash.className="gadget-shortcut"
         
     })
-    const gadgetShortcut = Controller('gadget-shortcut', gadgetShortcut => {
+    const gadgetShortcut = GroupController('gadget-shortcut', gadgetShortcut => {
     
     })
     const app1hash = Controller('app-1hash', (app1hash) => {
@@ -107,11 +110,11 @@ window.addEventListener('load', () => {
         app5hash.className='gadget-shortcut'
         
     })
-    
-    
-    const appActive = Controller('app-active', appActive => {
+    const appActive = Controller('app-active', (appActive) => {
     
     })
+    
+  
     
     
 })

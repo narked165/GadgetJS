@@ -26,7 +26,7 @@ app.once('NEW-DOCPATH', (docpath) => {
     \n`)
 })
 http_server.listen(http_server.cfg.port, http_server.cfg.host, () => {
-    app.emit('SERVER-UP')
+    app.emit('SERVER-UP', http_server.cfg.url)
 })
 
 

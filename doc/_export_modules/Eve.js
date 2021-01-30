@@ -1,9 +1,5 @@
-export default function () {
-    return function() {
-        this.name = 'eve'
-        this.constructor = {
+ const Eve = {
             events: {},
-        
             timestamp() {
                 return `[ ${ new Date().toLocaleTimeString() } ]`
             },
@@ -45,13 +41,9 @@ export default function () {
             
             },
             show() {
-                console.group(Object.keys(this.events))
-                console.groupEnd()
-            },
-        }
-        return { [this.name]: this.constructor.apply(this) }
-    }
-    
-   
+                Object.keys(this.events).forEach((evt, i) => console.info(`[${ i }] \t evt \n`))
+            }
 }
 
+
+export { Eve as default }

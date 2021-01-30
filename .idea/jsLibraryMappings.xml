@@ -3,7 +3,6 @@
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{GadgetJS/node_modules}" />
     <file url="file://$PROJECT_DIR$/src" libraries="{GadgetJS/node_modules}" />
-    <file url="file://$PROJECT_DIR$/src/DataStream/index.js" libraries="{GadgetJS/node_modules}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

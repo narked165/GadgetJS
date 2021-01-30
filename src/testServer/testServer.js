@@ -35,11 +35,11 @@ http_server.on('connection', (c) => {
     http_server.emit('INFO_EVENT', `New Client Connection from http://${ c.remoteAddress }:${ c.remotePort }`)
 })
 http_server.on('listening',() =>  app.emit('SERVER-UP', http_server.cfg.url))
-
+// ------------------------------------>
 http_server.on('request', (request, response) => {
     let { method } = request
     http_server.emit(method.toUpperCase().trim(), request, response)
-   
+   app.emit('NEW_DOCPATH', request.url)
     http_server.once('CLIENT_READY_RESPONSE', (_router) => {
         let responseLocation = _router.responseLocation()
         let responseData = _router.responseData(responseLocation)
@@ -58,12 +58,23 @@ http_server.on('request', (request, response) => {
        }
        
       function clientResponse(_response, responseLocation) {
-            pipeline(
-                responseLocation,
-                _response,
-                (err) => { err ? console.error(err) : !err }
-            )
           
+            _response.on('error', (err) => console.trace(err))
+          _response.on('close', (err) => _response.socket.write(''))
+          _response.on('end', () => _response.destroy())
+          
+            new Promise((resolve, reject) => {
+                pipeline(
+                    responseLocation,
+                    _response,
+                    (err) => err ? reject(err) : resolve(1)
+                )
+            })
+            
+      
+        
+              .then((b) => b |0 === 1 ? _response.emit(close, null) : !b)
+              .catch(err => err ? console.trace(err) : _response.emit('end', null))
        }
        
         
@@ -143,4 +154,3 @@ Router.prototype.responseHeaders = function(_origin, _contentType) {
 module.exports ={ http_server }
 
 
-http_server.listen(9022, 'localhost')
