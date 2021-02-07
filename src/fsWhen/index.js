@@ -60,23 +60,24 @@ function FSWhen() {
     return this
 }
 
+// Prototype Middleware API
 
 
-//  Access checks the file permissions using the READ, WRITE & EXECUTE constants
+//  [1]  Access checks the file permissions using the READ, WRITE & EXECUTE constants
 FSWhen.prototype.access = function(_location, callback){
     fsAsync.access(_location, R_OK | W_OK)
         .then(callback(true))
         .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false)) : !err)
 }
 
-// CopyFileSafe attempts to copy the file, Emitting an error event if the file exists (No Overwrite)
+// [2]   CopyFileSafe attempts to copy the file, Emitting an error event if the file exists (No Overwrite)
 FSWhen.prototype.copyFileSafe = function(_origin, _destination, callback) {
     fsAsync.copyFile(_origin, _destination, COPYFILE_EXCL, callback)
         .then(callback(true))
         .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false)) : !err)
 }
 
-//  CopyFileUnsafe attempts to copy the file, Overwrites file if it exists.
+//  [3]  CopyFileUnsafe attempts to copy the file, Overwrites file if it exists.
 FSWhen.prototype.copyFileUnsafe = function(_origin, _destination, callback) {
     fsAsync.copyFile(_origin, _destination)
         .then(callback(true))
@@ -84,7 +85,7 @@ FSWhen.prototype.copyFileUnsafe = function(_origin, _destination, callback) {
        
 }
 
-// Opens the file and returns the FD, (or null on error) to the callback, then closes the FD  after the read operation completes.
+// [4]  Opens the file and returns the FD, (or null on error) to the callback, then closes the FD  after the read operation completes.
 FSWhen.prototype.openRead = function(_location, _flags, _mode, callback) {
     fsAsync.open(_location, _flags, _mode)
         .then((fd) => { callback(true, fd); return fd })
@@ -92,7 +93,7 @@ FSWhen.prototype.openRead = function(_location, _flags, _mode, callback) {
         .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false, null)) : !err)
 }
 
-// Opens the directory and returns the FD, (or null on error) to the callback, then closes the FD after the operation completes.
+// [5]  Opens the directory and returns the FD, (or null on error) to the callback, then closes the FD after the operation completes.
 FSWhen.prototype.openDirectory = function(_location, _flags, _mode, _handler, callback) {
     fsAsync.opendir(_location, _flags, _mode)
         .then((fd) => { callback(true, fd); return fd })
@@ -100,7 +101,7 @@ FSWhen.prototype.openDirectory = function(_location, _flags, _mode, _handler, ca
         .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false, null)) : !err)
 }
 
-//  FSWhen checks if item is accessible and then, attempts to rename the target, or throws an Error Event.
+//  [6] FSWhen checks if item is accessible and then, attempts to rename the target, or throws an Error Event.
 FSWhen.prototype.renameItem = function(_handleInitial, _handleFinal, verify, callback) {
     this.access(_handleInitial, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -111,7 +112,7 @@ FSWhen.prototype.renameItem = function(_handleInitial, _handleFinal, verify, cal
 }
 
 
-//  Truncate opens FileHandle and uses the async ~ fsPromises API
+//  [7]  Truncate opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.truncate = function(_location, _flags, _mode, _len, callback) {
     fsAsync.open(_location, _flags, _mode)
         .then(fd => {
@@ -122,7 +123,7 @@ FSWhen.prototype.truncate = function(_location, _flags, _mode, _len, callback) {
         .catch(err => err ? console.error(err) : !err)
 }
 
-//  removes item recursively but throws error if the target does not exist.
+// [8]  removes item recursively but throws error if the target does not exist.
 FSWhen.prototype.removeItemRecurseSafe = function() {
     this.access(location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -133,7 +134,7 @@ FSWhen.prototype.removeItemRecurseSafe = function() {
     })
 }
 
-// removes item recursively and ignores errors thrown
+// [9]  removes item recursively and ignores errors thrown
 FSWhen.prototype.removeItemRecuseUnsafe = function() {
     this.access(location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -143,7 +144,7 @@ FSWhen.prototype.removeItemRecuseUnsafe = function() {
     })
 }
 
-//  Removes an item, ignoring errors but does not remove recursive items
+//  [10]  Removes an item, ignoring errors but does not remove recursive items
 FSWhen.prototype.removeItemUnsafe = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : !err
@@ -154,7 +155,7 @@ FSWhen.prototype.removeItemUnsafe = function(_location, verify, callback) {
     })
 }
 
-//  Removes items without recurrsion and errors when a target is inaccessable
+//  [11]  Removes items without recurrsion and errors when a target is inaccessable
 FSWhen.prototype.removeItemSafe = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(!err)
@@ -165,7 +166,7 @@ FSWhen.prototype.removeItemSafe = function(_location, verify, callback) {
     })
 }
 
-//  Uses access to verify the location exists before removal
+//  [12]  Uses access to verify the location exists before removal
 FSWhen.prototype.removeDirectory = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -175,7 +176,7 @@ FSWhen.prototype.removeDirectory = function(_location, verify, callback) {
     })
 }
 
-//  Checks if folder exists then attempts to create the directory.  Error if the folder exists.
+//  [13[  Checks if folder exists then attempts to create the directory.  Error if the folder exists.
 FSWhen.prototype.makeDirectory = function(_location, verify, callback) {
     fs.access(_location, (err) => {
        typeof(err) === 'undefined'
@@ -187,7 +188,7 @@ FSWhen.prototype.makeDirectory = function(_location, verify, callback) {
     })
 }
 
-// Checks access to the directory r/w, then attempts to read the directory contents; Error if the directory is inaccessible.
+// [14]  ]hecks access to the directory r/w, then attempts to read the directory contents; Error if the directory is inaccessible.
 FSWhen.prototype.readDirectory = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -197,7 +198,7 @@ FSWhen.prototype.readDirectory = function(_location, verify, callback) {
     })
 }
 
-// checks for access then attempts to read the referring target.  Error if the link or target does not exist.
+// [15]  checks for access then attempts to read the referring target.  Error if the link or target does not exist.
 FSWhen.prototype.readlink = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -207,7 +208,7 @@ FSWhen.prototype.readlink = function(_location, verify, callback) {
     })
 }
 
-// Uses Access to check that referrng location exsists, then attempts to create a symbolic link
+// [16]   Uses Access to check that referrng location exsists, then attempts to create a symbolic link
 // Error if the link exists, or the referring target does not.
 FSWhen.prototype.symlink = function(_location, _linkLocation, verify, callback) {
     this.access(_location, (acc, err) => {
@@ -219,7 +220,7 @@ FSWhen.prototype.symlink = function(_location, _linkLocation, verify, callback) 
 }
 
 
-//  Stats opens FileHandle and uses the async ~ fsPromises API
+//  [17]  Stats opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.stats = function(_location, _flags, _mode, callback) {
     fsAsync.open(_location, _flags, _mode)
         .then(fd => {
@@ -230,7 +231,7 @@ FSWhen.prototype.stats = function(_location, _flags, _mode, callback) {
         .catch(err => err ? console.error(err) : !err)
 }
 
-//  Link uses access to verify r/w and calls fs-promises-link inside the callback.
+//  [18]  Link uses access to verify r/w and calls fs-promises-link inside the callback.
 FSWhen.prototype.link = function(_locationInitial, _locationFinal, verify, callback) {
     this.access(_locationInitial, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -240,7 +241,7 @@ FSWhen.prototype.link = function(_locationInitial, _locationFinal, verify, callb
     })
 }
 
-// Uses access r/w to verify the file before removing eles emits an error event
+// [19]  Uses access r/w to verify the file before removing eles emits an error event
 FSWhen.prototype.unlink = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -250,7 +251,7 @@ FSWhen.prototype.unlink = function(_location, verify, callback) {
     })
 }
 
-//  checks fike exists with access then attempts to change the mode.  Error if the target is not accesible.
+//  [21]  checks fike exists with access then attempts to change the mode.  Error if the target is not accesible.
 FSWhen.prototype.lchmod = function(_location, _mode, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -260,7 +261,7 @@ FSWhen.prototype.lchmod = function(_location, _mode, verify, callback) {
     })
 }
 
-// checks file existance with access r/w then attempts to set the uid & gid of the target.
+// [22]  checks file existance with access r/w then attempts to set the uid & gid of the target.
 // Error of the uid or gid does not have prerequisite authority or target does not exist.
 FSWhen.prototype.lchown = function(_location, _ownerId, _groupId, verify, callback) {
     this.access(_location, (acc, err) => {
@@ -273,7 +274,7 @@ FSWhen.prototype.lchown = function(_location, _ownerId, _groupId, verify, callba
     })
 }
 
-//  utimes uses access r/w to check file access then attempts to change that files timestamp.
+//  [23]  utimes uses access r/w to check file access then attempts to change that files timestamp.
 FSWhen.prototype.utimes = function(_location, _atime, _mtime, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -284,17 +285,17 @@ FSWhen.prototype.utimes = function(_location, _atime, _mtime, verify, callback) 
     
 }
 
-
-FSWhen.prototype.lutimes = function(_location, verify, callback) {
-    this.access(_location, (acc, err) => {
-        err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
-        fsAsync.lutimes(_handleInitial, _handleFinal)
-            .then(callback(true))
-            .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false)) : !err)
-    })
+//  [24]  Checks if the file exists then attempts to change the timestamp, errors if the file doesn't exist.
+FSWhen.prototype.lutimes = function(_location, _atime, _mtime, verify, callback) {
+        this.access(_location, (acc, err) => {
+            err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
+            fsAsync.utimes(_location, _atime, _mtime)
+                .then(callback(true))
+                .catch(err => err ? this.emit(ERROR_EVENT, err, callback(false)) : !err)
+        })
 }
 
-// uses access to check that the file exists then resolves the absolute path, error if it doesnt exist.
+//  [25]  uses access to check that the file exists then resolves the absolute path, error if it doesnt exist.
 FSWhen.prototype.realPath = function(_location, verify, callback) {
     this.access(_location, (acc, err) => {
         err ? this.emit(ERROR_EVENT, err, callback(false)) : verify(true)
@@ -305,7 +306,7 @@ FSWhen.prototype.realPath = function(_location, verify, callback) {
 }
 
 
-//  works
+// [26]  checks if directory exists then attempts to make a directotry with the prefix, errors  if the tempdir exists
 FSWhen.prototype.mkdtemp= function(_prefix, verify, callback) {
     let TEMP_DIR = os.tmpdir(),
     _location = `${ TEMP_DIR }${ _prefix }${ sep }`
@@ -321,7 +322,7 @@ FSWhen.prototype.mkdtemp= function(_prefix, verify, callback) {
 }
 
 
-//  Write File opens FileHandle and uses the async ~ fsPromises API
+//  [27]   Write File opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.writeFile = function(_location, _flag, _mode, data, callback) {
     fsAsync.open(_location, _flag, _mode)
         .then(fd => {
@@ -332,7 +333,7 @@ FSWhen.prototype.writeFile = function(_location, _flag, _mode, data, callback) {
 },
 
 
-//  Append File opens FileHandle and uses the async ~ fsPromises API
+//  [28]  Append File opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.appendFile = function(_location, _flags, _mode, _data, _encoding, callback) {
     fsAsync.open(_location, _flags, _mode)
         .then(fd => {
@@ -342,7 +343,7 @@ FSWhen.prototype.appendFile = function(_location, _flags, _mode, _data, _encodin
         .catch(err => err ? this.emit(ERROR_EVENT, err) : !err)
 }
 
-//  Read File opens FileHandle and uses the async ~ fsPromises API
+//  [29]  Read File opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.readFile = function(_location, _flags, _mode, _encoding, callback) {
     fsAsync.open(_location, _flags, _mode )
         .then(fd => {
@@ -353,7 +354,7 @@ FSWhen.prototype.readFile = function(_location, _flags, _mode, _encoding, callba
         .catch(err => err ? this.emit(ERROR_EVENT, err) : !err)
 }
 
-// Read opens FileHandle and uses the async ~ fsPromises API
+//  [30]  Read opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.read = function(_location, _flags, _mode, _buffer, _offset, _len, _position, callback) {
     fsAsync.open(_location, _flags, _mode)
         .then(fd => {
@@ -368,7 +369,7 @@ FSWhen.prototype.read = function(_location, _flags, _mode, _buffer, _offset, _le
         .catch(err => err ? this.emit(ERROR_EVENT, err) : !err)
 }
 
-//  Chmod opens FileHandle and uses the async ~ fsPromises API
+//  [31]  Chmod opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.chmod = function(_location, _flags, _mode, _nmod, callback) {
     fsAsync.open(_location, _flags, _mode, _nmod)
         .then(fd => {
@@ -382,7 +383,7 @@ FSWhen.prototype.chmod = function(_location, _flags, _mode, _nmod, callback) {
         })
         .catch(err => err ? this.emit(ERROR_EVENT, err) : !err)
 }
-// Chown opens FileHandle and uses the async ~ fsPromises API
+//  [32]  Chown opens FileHandle and uses the async ~ fsPromises API
 FSWhen.prototype.chown = function(_location, _flags, _mode, _noid, callback) {
     fsAsync.open(_location, _flags, _mode, _noid)
         .then(fd => {
@@ -407,128 +408,4 @@ fsWhen.on(ERROR_EVENT, err => {
 })
 
 module.exports = { fsWhen }
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Hardened Functions ~~~~~~~~~~~~~~~~~~~~~
 
-function writeFile(_location, _flag, _mode, data, callback) {
-    fsAsync.open(_location, _flag, _mode)
-        .then(fd => {
-            fd.writeFile(data, callback(data, _location))
-            console.log(fd)
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function write(_location, _flags, _mode, _data, _position, _encoding, callback) {
-    fsAsync.open(_location, _flags, _mode)
-        .then(fd => {
-            fd.write(_data, _position, _encoding, callback(_data))
-            
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-
-// Done
-function appendFile(_location, _flags, _mode, _data, _encoding, callback) {
-    fsAsync.open(_location, _flags, _mode)
-        .then(fd => {
-            fd.appendFile(_data, _encoding, callback(_data, _location))
-            
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function readFile(_location, _flags, _mode, _encoding, callback) {
-    fsAsync.open(_location, _flags, _mode )
-        .then(fd => {
-            fd.readFile(_encoding)
-                .then(_data => callback(_data, _location ))
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function statistics(_location, _flags, _mode, callback) {
-    fsAsync.open(_location, _flags, _mode)
-        .then(fd => {
-            fd.stat()
-                .then(data => callback(data))
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function truncate(_location, _flags, _mode, _len, callback) {
-    fsAsync.open(_location, _flags, _mode)
-        .then(fd => {
-            fd.truncate(_len)
-                .then(data => callback(data))
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function read(_location, _flags, _mode, _buffer, _offset, _len, _position, callback) {
-    fsAsync.open(_location, _flags, _mode)
-        .then(fd => {
-            fd.read(_buffer, _offset, _len, _position)
-                .then( data  => callback(data))
-                .catch(err => {
-                    err ? console.error(err) : !err
-                })
-            
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function chmod(_location, _flags, _mode, _nmod, callback) {
-    fsAsync.open(_location, _flags, _mode, _nmod)
-        .then(fd => {
-            fd.chmod(_nmod)
-                .then( data  => callback())
-                .catch(err => {
-                    err ? console.error(err) : !err
-                })
-            
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-function chown(_location, _flags, _mode, _noid, callback) {
-    fsAsync.open(_location, _flags, _mode, _noid)
-        .then(fd => {
-            fd.chmod(_noid)
-                .then( data  => callback())
-                .catch(err => {
-                    err ? console.error(err) : !err
-                })
-            
-            fd.close()
-        })
-        .catch(err => err ? console.error(err) : !err)
-}
-
-/*
-fsWhen.open('./test.txt', ['a+', 0o666], (fd) => {
-    console.log(fd)
-})
-fsWhen.access(__dirname + '/test.txt', [R_OK, W_OK, X_OK], () => {
-    console.log('Access Granted!')
-})
-fsWhen.readFile('./src/test.txt', ['r', 0o666], (data) => {
-    console.log(data)
-})
-
-let textExample = " I am a test."
-let path1 = joinPath(__dirname, 'test.txt')
-let path2 = joinPath(__dirname, 'test.txt')
-
-module.exports = { fsWhen: new FSWhen() }
-
-fsWhen.renamedItem(path1, path2, ['r'], () => {
-    console.log('done')
-})
-
-*/

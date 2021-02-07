@@ -15,11 +15,18 @@ const VERIFY_NO_ACCESS = function(vbit) {
         : console.log('File or folder param can be created.')
 }
 
-fsWhen.mkdtemp('foobles', VERIFY_NO_ACCESS, ( dir, vbit) => {
-    vbit && console.log(dir)
-})
-
 /*
+ let timestamp = new Date(Date.now() / 1000).getSeconds()
+ let timeMedian = new Date('1-1-2020')
+ console.log(timestamp)
+ fsWhen.lutimes('./test.txt', timestamp, timeMedian, VERIFY_ACCESS, (vbit) => {
+ vbit ?  console.info('Operation Complete') : console.warn('There was a problem')
+ })
+
+ // -------------->
+ fsWhen.mkdtemp('foobles', VERIFY_NO_ACCESS, ( dir, vbit) => {
+ vbit && console.log(dir)
+ })
  
  fsWhen.realPath('./test.txt', VERIFY_ACCESS, (vbit, data) => {
  vbit && console.log(data)
@@ -102,5 +109,24 @@ fsWhen.copyFileSafe('./test.txt', './test3.txt', (vbit) => {
         ? console.warn('There was a problem...\n')
         : console.log('COPYFILE ... done')
 })
-
-*/
+ fsWhen.open('./test.txt', ['a+', 0o666], (fd) => {
+ console.log(fd)
+ })
+ fsWhen.access(__dirname + '/test.txt', [R_OK, W_OK, X_OK], () => {
+ console.log('Access Granted!')
+ })
+ fsWhen.readFile('./src/test.txt', ['r', 0o666], (data) => {
+ console.log(data)
+ })
+ 
+ let textExample = " I am a test."
+ let path1 = joinPath(__dirname, 'test.txt')
+ let path2 = joinPath(__dirname, 'test.txt')
+ 
+ module.exports = { fsWhen: new FSWhen() }
+ 
+ fsWhen.renamedItem(path1, path2, ['r'], () => {
+ console.log('done')
+ })
+ 
+ */
